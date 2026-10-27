@@ -22,3 +22,6 @@ venv/
 *.log
 .DS_Store
 Thumbs.db
+
+# 提交用压缩包
+*.zip
