@@ -1,0 +1,135 @@
+# 校园快递驿站管理系统 —— redis-cli 命令对照清单
+# 使用方式：先启动 redis-server，再执行 redis-cli 进入交互模式，逐条粘贴命令。
+# 说明：单号 P000001 为演示数据，实际以 seed_demo.py 生成结果为准。
+
+# ============ 0. 连接与总览 ============
+redis-cli -h 127.0.0.1 -p 6379
+PING
+DBSIZE
+KEYS parcel:*
+TYPE parcel:P000001
+OBJECT ENCODING parcel:P000001
+
+# ============ 1. 包裹信息管理（Hash / Set / ZSet / String） ============
+# 1.1 生成包裹自增编号（String + INCR 原子自增）
+INCR parcel:id
+
+# 1.2 包裹入库：写 Hash（字段可动态扩展，适合半结构化记录）
+HSET parcel:P000001 id P000001 tracking_no SF1234567890 courier 顺丰 \
+  receiver_id 20211003 receiver 张伟 phone 138****8888 station 菜鸟驿站·北区 \
+  category 数码 shelf 货架9号 weight 1.2 status PENDING inbound_time 1791812188 \
+  expire_time 1792416988 pickup_code "" picked_time "" abnormal_reason ""
+
+# 1.3 用户包裹索引（Set：天然去重，可直接求交并）
+SADD user:20211003:parcels P000001
+SMEMBERS user:20211003:parcels
+SCARD user:20211003:parcels
+
+# 1.4 状态索引（Set：按状态分组，便于批量筛选）
+SADD parcels:status:PENDING P000001
+SMEMBERS parcels:status:PENDING
+SCARD parcels:status:PENDING
+
+# 1.5 滞留排行（ZSet：score 存入库时间戳，升序即滞留最久）
+ZADD parcels:stay 1791812188 P000001
+ZRANGE parcels:stay 0 4 WITHSCORES
+ZRANGEBYSCORE parcels:stay -inf 1792416988
+
+# 1.6 查询包裹（Hash 全字段）
+HGETALL parcel:P000001
+HGET parcel:P000001 status
+HMGET parcel:P000001 courier shelf status
+
+# 1.7 状态更新与异常标记
+HSET parcel:P000001 status ABNORMAL abnormal_reason 外包装破损
+SREM parcels:status:PENDING P000001
+SADD parcels:status:ABNORMAL P000001
+
+# 1.8 删除包裹（同步清理各索引）
+DEL parcel:P000001
+SREM user:20211003:parcels P000001
+SREM parcels:status:ABNORMAL P000001
+ZREM parcels:stay P000001
+
+# ============ 2. 取件码与取件记录（String+TTL / List / Stream） ============
+# 2.1 生成 6 位取件码，3 天（259200 秒）自动过期
+SET pickup:code:058542 P000001 EX 259200 NX
+GET pickup:code:058542
+TTL pickup:code:058542
+
+# 2.2 反向索引：包裹 -> 取件码
+SET parcel:P000001:code 058542 EX 259200
+GET parcel:P000001:code
+
+# 2.3 校验取件码（返回值即包裹编号）
+GET pickup:code:058542
+
+# 2.4 取件核销：改状态 + 删码 + 保留 10 分钟已用标记（重复取件拦截）
+HSET parcel:P000001 status PICKED picked_time 1792503457 picked_time_text "2026-10-20 21:37:37"
+DEL pickup:code:058542
+SET pickup:used:058542 P000001 EX 600
+GET pickup:used:058542
+SREM parcels:status:PENDING P000001
+SADD parcels:status:PICKED P000001
+ZREM parcels:stay P000001
+
+# 2.5 取件历史（List：最新记录在表头，LTRIM 只留最近 50 条）
+LPUSH user:20211003:pickups "{\"parcel_id\":\"P000001\",\"courier\":\"顺丰\",\"pickup_time_text\":\"2026-10-20 21:37:37\"}"
+LTRIM user:20211003:pickups 0 49
+LRANGE user:20211003:pickups 0 9
+LLEN user:20211003:pickups
+
+# 2.6 取件事件日志（Stream：可回溯、可按 ID 范围消费）
+XADD pickup:stream MAXLEN ~ 10000 * parcel_id P000001 receiver_id 20211003 \
+  receiver 张伟 courier 顺丰 shelf 货架9号 staff 自助取件 time "2026-10-20 21:37:37"
+XLEN pickup:stream
+XREVRANGE pickup:stream + - COUNT 5
+
+# ============ 3. 包裹排行与统计（ZSet / Hash / HyperLogLog） ============
+# 3.1 用户包裹数量排行（ZSet：ZINCRBY 原子加分）
+ZINCRBY rank:user:parcels 1 20211003
+ZREVRANGE rank:user:parcels 0 4 WITHSCORES
+ZSCORE rank:user:parcels 20211003
+
+# 3.2 各状态包裹计数（Hash：HINCRBY 原子增减）
+HINCRBY stats:status PENDING 1
+HINCRBY stats:status PICKED 1
+HGETALL stats:status
+
+# 3.3 每日入库/取件量（Hash：按天分桶，Key 带日期）
+HINCRBY stats:daily:2026-10-20 inbound 1
+HINCRBY stats:daily:2026-10-20 picked 1
+HGETALL stats:daily:2026-10-20
+
+# 3.4 去重取件用户数（HyperLogLog：固定 12KB，误差 0.81%）
+PFADD stats:pickup_users 20211003
+PFCOUNT stats:pickup_users
+
+# ============ 4. 异常功能扩展（Set / List / ZSet / String） ============
+# 4.1 黑名单（Set：O(1) 判断）
+SADD blacklist:users 20211012
+SISMEMBER blacklist:users 20211012
+SMEMBERS blacklist:users
+SREM blacklist:users 20211012
+
+# 4.2 取件高峰队列（List：RPUSH 入队，LPOP 叫号，先进先出）
+RPUSH station:queue 20211001 20211002 20211003
+LRANGE station:queue 0 -1
+LPOS station:queue 20211002
+LPOP station:queue
+SET station:queue:serving 20211001
+LLEN station:queue
+
+# 4.3 超期未取提醒（ZSet：记录提醒，取件后移除）
+ZADD overdue:alerts 1791812188 P000004
+ZREVRANGE overdue:alerts 0 9 WITHSCORES
+ZREM overdue:alerts P000004
+
+# ============ 5. 辅助排查 ============
+TYPE rank:user:parcels
+TYPE user:20211003:pickups
+TYPE pickup:stream
+TYPE stats:pickup_users
+TTL pickup:code:058542
+MEMORY USAGE parcel:P000001
+SCAN 0 MATCH parcel:P* COUNT 100

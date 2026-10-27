@@ -1,0 +1,75 @@
+<view class="page" wx:if="{{parcel}}">
+  <view class="head-card">
+    <view class="row">
+      <view>
+        <view class="head-courier">{{parcel.courier}}</view>
+        <view class="head-no">{{parcel.tracking_no}}</view>
+      </view>
+      <text class="tag {{tagClass}}">{{parcel.status_text}}</text>
+    </view>
+  </view>
+
+  <view class="card" wx:if="{{parcel.status === 'PENDING' || parcel.status === 'EXPIRED'}}">
+    <view class="card-title">货架指示灯</view>
+    <view class="lamp-box">
+      <view class="lamp {{lightOn ? 'on' : ''}}"></view>
+      <view class="lamp-info">
+        <view class="lamp-shelf">{{lightOn ? lightShelf : parcel.shelf}}</view>
+        <view class="muted" wx:if="{{lightOn}}">灯已点亮 · {{lightLeft}} 秒后自动熄灭</view>
+        <view class="muted" wx:else>取件时点亮，指示灯会闪烁提示位置</view>
+      </view>
+    </view>
+    <button class="btn {{lightOn ? 'btn-ghost' : ''}}" bindtap="lightShelf">{{lightOn ? '重新点亮' : '点亮货架灯'}}</button>
+  </view>
+
+  <view class="card" wx:if="{{parcel.status === 'PENDING' || parcel.status === 'EXPIRED'}}">
+    <view class="card-title">取件码</view>
+    <view wx:if="{{code}}" class="code-box">
+      <view class="code-text" bindtap="copyCode">{{code}}</view>
+      <view class="muted">点击可复制 · 有效期约 {{ttl}} 秒</view>
+    </view>
+    <view wx:else class="empty">取件码已过期，可重新获取</view>
+    <button class="btn" bindtap="generateCode" wx:if="{{!code}}">重新获取取件码</button>
+    <button class="btn btn-ghost" bindtap="goPickup">去取件</button>
+    <button class="btn btn-ghost btn-danger" bindtap="refuse">拒收包裹</button>
+  </view>
+
+  <view class="card" wx:if="{{parcel.status === 'PICKED'}}">
+    <view class="card-title">退货</view>
+    <view class="muted">包裹已取走，如有质量问题可在驿站申请退货。</view>
+    <button class="btn btn-ghost" bindtap="applyReturn">申请退货</button>
+  </view>
+
+  <view class="card">
+    <view class="card-title">包裹信息</view>
+    <view class="info-row"><text class="info-label">包裹编号</text><text>{{parcel.id}}</text></view>
+    <view class="info-row"><text class="info-label">收件人</text><text>{{parcel.receiver}}（{{parcel.receiver_id}}）</text></view>
+    <view class="info-row"><text class="info-label">联系电话</text><text>{{parcel.phone || '-'}}</text></view>
+    <view class="info-row"><text class="info-label">所属驿站</text><text>{{parcel.station}}</text></view>
+    <view class="info-row"><text class="info-label">货架位置</text><text>{{parcel.shelf}}</text></view>
+    <view class="info-row"><text class="info-label">物品类别</text><text>{{parcel.category}}</text></view>
+    <view class="info-row"><text class="info-label">包裹重量</text><text>{{parcel.weight}} kg</text></view>
+    <view class="info-row"><text class="info-label">入库时间</text><text>{{inboundText}}</text></view>
+    <view class="info-row" wx:if="{{pickedText}}"><text class="info-label">取件时间</text><text>{{pickedText}}</text></view>
+    <view class="info-row" wx:if="{{parcel.abnormal_reason}}"><text class="info-label">异常原因</text><text>{{parcel.abnormal_reason}}</text></view>
+    <view class="info-row" wx:if="{{parcel.refused_reason}}"><text class="info-label">拒收原因</text><text>{{parcel.refused_reason}}</text></view>
+    <view class="info-row" wx:if="{{parcel.return_reason}}"><text class="info-label">退货原因</text><text>{{parcel.return_reason}}</text></view>
+  </view>
+
+  <view class="tip-card" wx:if="{{parcel.status === 'REFUSED'}}">
+    该包裹已被收件人拒收，已退回快递公司。拒收时间：{{parcel.refused_time_text}}
+  </view>
+  <view class="tip-card" wx:if="{{parcel.status === 'RETURNED'}}">
+    该包裹已退货，退货时间：{{parcel.return_time_text}}
+  </view>
+
+  <view class="tip-card" wx:if="{{parcel.status === 'ABNORMAL'}}">
+    该包裹为异常件，请携带有效证件到驿站柜台人工处理。
+  </view>
+  <view class="tip-card" wx:if="{{parcel.status === 'EXPIRED'}}">
+    该包裹已超过约定保管期，请尽快到驿站处理。
+  </view>
+  <view class="tip-card" wx:if="{{parcel.status === 'PICKED'}}">
+    包裹已取件，取件码立即失效，不可重复取件。
+  </view>
+</view>

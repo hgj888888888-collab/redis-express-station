@@ -1,0 +1,70 @@
+.parcel-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid #F0F3FA;
+}
+
+.parcel-item:last-child {
+  border-bottom: none;
+}
+
+.parcel-line1 {
+  display: flex;
+  align-items: center;
+}
+
+.courier {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-right: 14rpx;
+}
+
+.parcel-line2 {
+  font-size: 24rpx;
+  color: #5C6784;
+  margin-top: 8rpx;
+  letter-spacing: 1rpx;
+}
+
+.parcel-line3 {
+  font-size: 23rpx;
+  color: #A0A9BC;
+  margin-top: 8rpx;
+}
+
+.parcel-code {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #1E4FD8;
+  letter-spacing: 2rpx;
+  margin-top: 6rpx;
+}
+
+.dot {
+  margin: 0 8rpx;
+}
+
+.parcel-right {
+  text-align: right;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.parcel-time {
+  font-size: 21rpx;
+  color: #A0A9BC;
+}
+
+.parcel-arrow {
+  font-size: 34rpx;
+  color: #C6D0E4;
+  margin-top: 10rpx;
+}
+
+.footer-tip {
+  text-align: center;
+  color: #B3BBCB;
+  font-size: 22rpx;
+  margin-top: 10rpx;
+}

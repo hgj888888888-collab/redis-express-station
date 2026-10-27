@@ -1,0 +1,6 @@
+.login-tip {
+  text-align: center;
+  font-size: 23rpx;
+  color: #A7B0C2;
+  margin-top: 22rpx;
+}

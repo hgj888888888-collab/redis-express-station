@@ -1,0 +1,60 @@
+<view class="page">
+  <view class="card">
+    <view class="card-title">
+      <text>拒收 / 退货管理</text>
+      <text class="sub">共 {{total}} 条</text>
+    </view>
+    <view class="tabs">
+      <view
+        class="tab-item {{tab === item.key ? 'active' : ''}}"
+        wx:for="{{tabs}}"
+        wx:key="key"
+        data-key="{{item.key}}"
+        bindtap="switchTab"
+      >
+        {{item.label}}（{{item.key === 'REFUSED' ? countRefused : countReturned}}）
+      </view>
+    </view>
+    <input
+      class="input search"
+      value="{{keyword}}"
+      bindinput="onKeyword"
+      placeholder="搜索包裹编号 / 快递单号 / 收件人"
+    />
+  </view>
+
+  <view wx:if="{{list.length === 0}}" class="card">
+    <view class="empty">{{tab === 'REFUSED' ? '暂无拒收记录' : '暂无退货记录'}}</view>
+  </view>
+
+  <view class="card item" wx:for="{{list}}" wx:key="id">
+    <view class="item-head">
+      <text class="item-id">{{item.id}}</text>
+      <text class="tag {{item.tagClass}}">{{item.status_text}}</text>
+    </view>
+    <view class="item-line">{{item.courier}} · {{item.tracking_no}}</view>
+    <view class="item-line">{{item.receiver}}（{{item.receiver_id}}） · {{item.station}} · {{item.shelf}}</view>
+    <view class="item-reason">
+      <text class="reason-label">{{tab === 'REFUSED' ? '拒收原因' : '退货原因'}}</text>
+      <text>{{item.reason || '-'}}</text>
+    </view>
+    <view class="item-time">{{tab === 'REFUSED' ? '拒收时间' : '退货时间'}}：{{item.timeText || '-'}}</view>
+    <view class="item-btns">
+      <view
+        class="btn btn-sm"
+        wx:if="{{tab === 'REFUSED'}}"
+        data-id="{{item.id}}"
+        bindtap="sendBack"
+      >发回发出地</view>
+      <view
+        class="btn btn-sm btn-ghost"
+        wx:if="{{tab === 'REFUSED'}}"
+        data-id="{{item.id}}"
+        bindtap="restore"
+      >撤销拒收</view>
+      <view class="btn btn-sm btn-danger" data-id="{{item.id}}" bindtap="remove">删除记录</view>
+    </view>
+  </view>
+
+  <view class="footer-tip">数据来源：Redis Set 状态索引 + Hash 明细</view>
+</view>

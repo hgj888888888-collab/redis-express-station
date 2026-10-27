@@ -1,0 +1,13 @@
+<view class="tab-bar">
+  <block wx:for="{{list}}" wx:key="index">
+    <view
+      class="tab-item {{selected === item.index ? 'active' : ''}}"
+      wx:if="{{role === 'admin' || !item.adminOnly}}"
+      data-url="{{item.pagePath}}"
+      bindtap="switchTab"
+    >
+      <view class="tab-text">{{item.text}}</view>
+      <view class="tab-dot" wx:if="{{selected === item.index}}"></view>
+    </view>
+  </block>
+</view>

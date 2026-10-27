@@ -1,0 +1,82 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-title">校园快递驿站</view>
+    <view class="hero-sub">北区 · 校园快递驿站</view>
+    <view class="user-bar">
+      <input class="user-input" value="{{userId}}" bindinput="onUserIdInput" placeholder="输入学号" />
+      <view class="user-btn" bindtap="switchUser">切换用户</view>
+    </view>
+  </view>
+
+  <view class="quick-card notify-entry" bindtap="goNotify">
+    <view>
+      <view class="quick-title">
+        到件通知
+        <text class="notify-badge" wx:if="{{unread > 0}}">{{unread}}</text>
+      </view>
+      <view class="quick-sub">{{unread > 0 ? '有 ' + unread + ' 条未读到件消息' : '暂无未读到件消息'}}</view>
+    </view>
+    <view class="quick-arrow">›</view>
+  </view>
+
+  <view class="quick-card" bindtap="goPending">
+    <view>
+      <view class="quick-title">我的待取件 · {{pendingCount}} 件</view>
+      <view class="quick-sub">点击查看全部未取包裹</view>
+    </view>
+    <view class="quick-arrow">›</view>
+  </view>
+
+  <view class="quick-card" bindtap="goPickup">
+    <view>
+      <view class="quick-title">凭取件码取件</view>
+      <view class="quick-sub">输入 6 位取件码，快速核销</view>
+    </view>
+    <view class="quick-arrow">›</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>待取包裹</text>
+      <text class="sub">{{userName ? userName + ' · ' : ''}}最近 2 件 / 共 {{pendingCount}} 件</text>
+    </view>
+
+    <view wx:if="{{pendingCount === 0}}" class="empty">
+      暂无待取包裹，请确认学号是否正确
+    </view>
+
+    <view
+      class="parcel-item"
+      wx:for="{{previewParcels}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="goDetail"
+    >
+      <view class="parcel-main">
+        <view class="parcel-line1">
+          <text class="courier">{{item.courier}}</text>
+          <text class="tag {{item.tagClass}}">{{item.status_text}}</text>
+        </view>
+        <view class="parcel-line2">{{item.tracking_no}}</view>
+        <view class="parcel-code" wx:if="{{item.pickup_code && (item.status === 'PENDING' || item.status === 'EXPIRED')}}">取件码 {{item.pickup_code}}</view>
+        <view class="parcel-line3">
+          <text>{{item.station}}</text>
+          <text class="dot">·</text>
+          <text>{{item.shelf}}</text>
+        </view>
+      </view>
+      <view class="parcel-right">
+        <view class="parcel-time">{{item.inboundText}}</view>
+        <view class="parcel-arrow">›</view>
+      </view>
+    </view>
+
+    <view class="more-link" wx:if="{{pendingCount > 2}}" bindtap="goPending">
+      查看全部 {{pendingCount}} 件待取包裹 ›
+    </view>
+  </view>
+  <view class="admin-entry" wx:if="{{role !== 'admin'}}" bindtap="goLogin">管理员登录 ›</view>
+  <view class="admin-entry" wx:else bindtap="logout">当前管理员：{{adminName}} · 退出</view>
+
+  <view class="footer-tip">数据来源：Redis 实时读写</view>
+</view>

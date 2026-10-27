@@ -1,0 +1,139 @@
+.ov-grid {
+  display: flex;
+}
+
+.ov-item {
+  flex: 1;
+  text-align: center;
+}
+
+.ov-num {
+  font-size: 38rpx;
+  font-weight: 600;
+  color: #1E4FD8;
+}
+
+.ov-label {
+  font-size: 21rpx;
+  color: #8A93A6;
+  margin-top: 6rpx;
+}
+
+.chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 300rpx;
+  padding: 10rpx 4rpx 0;
+}
+
+.bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  height: 200rpx;
+}
+
+.bar {
+  width: 18rpx;
+  border-radius: 6rpx 6rpx 0 0;
+  margin: 0 3rpx;
+}
+
+.bar-in {
+  background: #1E4FD8;
+}
+
+.bar-out {
+  background: #12A150;
+}
+
+.bar-num {
+  font-size: 18rpx;
+  color: #8A93A6;
+  margin-top: 8rpx;
+}
+
+.bar-date {
+  font-size: 19rpx;
+  color: #A0A9BC;
+  margin-top: 4rpx;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 18rpx;
+}
+
+.legend-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 3rpx;
+  margin: 0 8rpx 0 24rpx;
+}
+
+.dot-in {
+  background: #1E4FD8;
+}
+
+.dot-out {
+  background: #12A150;
+}
+
+.legend-text {
+  font-size: 22rpx;
+  color: #5C6784;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 0;
+}
+
+.stat-label {
+  width: 130rpx;
+  font-size: 23rpx;
+  color: #5C6784;
+  flex-shrink: 0;
+}
+
+.stat-track {
+  flex: 1;
+  height: 16rpx;
+  background: #F0F3FA;
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin: 0 16rpx;
+}
+
+.stat-fill {
+  height: 100%;
+  border-radius: 8rpx;
+}
+
+.stat-value {
+  width: 70rpx;
+  text-align: right;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #1A1F36;
+  flex-shrink: 0;
+}
+
+.footer-tip {
+  text-align: center;
+  font-size: 22rpx;
+  color: #A7B0C2;
+  padding: 10rpx 0 30rpx;
+}

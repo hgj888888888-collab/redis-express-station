@@ -1,0 +1,24 @@
+# Redis 绿色版运行文件（体积大，不入库）
+_redis/
+
+# 提交用副本（本地保留，避免仓库里出现两份代码）
+2520148117 黄国济/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Word / Office 临时锁文件
+~$*.docx
+
+# 编辑器与 IDE
+.vscode/
+.idea/
+
+# 日志与本地缓存
+*.log
+.DS_Store
+Thumbs.db

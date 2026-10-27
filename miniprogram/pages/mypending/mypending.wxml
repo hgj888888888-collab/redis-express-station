@@ -1,0 +1,40 @@
+<view class="page">
+  <view class="card">
+    <view class="card-title">
+      <text>我的待取件</text>
+      <text class="sub">{{userName ? userName + ' · ' : ''}}共 {{parcels.length}} 件</text>
+    </view>
+
+    <view wx:if="{{parcels.length === 0}}" class="empty">
+      暂无待取包裹
+    </view>
+
+    <view
+      class="parcel-item"
+      wx:for="{{parcels}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="goDetail"
+    >
+      <view class="parcel-main">
+        <view class="parcel-line1">
+          <text class="courier">{{item.courier}}</text>
+          <text class="tag {{item.tagClass}}">{{item.status_text}}</text>
+        </view>
+        <view class="parcel-line2">{{item.tracking_no}}</view>
+        <view class="parcel-code" wx:if="{{item.pickup_code}}">取件码 {{item.pickup_code}}</view>
+        <view class="parcel-line3">
+          <text>{{item.station}}</text>
+          <text class="dot">·</text>
+          <text>{{item.shelf}}</text>
+        </view>
+      </view>
+      <view class="parcel-right">
+        <view class="parcel-time">{{item.inboundText}}</view>
+        <view class="parcel-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="footer-tip">数据来源：Redis 实时读写</view>
+</view>

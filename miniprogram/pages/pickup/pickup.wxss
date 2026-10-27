@@ -1,0 +1,146 @@
+.code-input {
+  background: #F5F7FC;
+  border-radius: 16rpx;
+  height: 110rpx;
+  text-align: center;
+  font-size: 56rpx;
+  letter-spacing: 20rpx;
+  color: #1E4FD8;
+  margin-bottom: 24rpx;
+  padding-left: 20rpx;
+}
+
+.center {
+  text-align: center;
+  margin-top: 16rpx;
+}
+
+.success-card {
+  border-top: 8rpx solid #12A150;
+}
+
+.success-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #12A150;
+}
+
+.success-no {
+  font-size: 26rpx;
+  color: #5C6784;
+  margin: 8rpx 0 22rpx;
+  letter-spacing: 1rpx;
+}
+
+.success-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.sg-item {
+  width: 50%;
+  margin-bottom: 16rpx;
+}
+
+.sg-label {
+  font-size: 22rpx;
+  color: #A0A9BC;
+}
+
+.sg-value {
+  font-size: 26rpx;
+  margin-top: 4rpx;
+}
+
+.queue-row {
+  display: flex;
+  align-items: center;
+  background: #F5F7FC;
+  border-radius: 16rpx;
+  padding: 22rpx;
+}
+
+.queue-num {
+  font-size: 52rpx;
+  font-weight: 600;
+  color: #1E4FD8;
+  width: 110rpx;
+  text-align: center;
+}
+
+.queue-info {
+  flex: 1;
+  font-size: 26rpx;
+}
+
+.queue-btns {
+  flex-shrink: 0;
+}
+
+.serving-box {
+  display: flex;
+  align-items: center;
+  margin-top: 18rpx;
+  padding: 18rpx 22rpx;
+  background: #FFFBF2;
+  border-radius: 16rpx;
+}
+
+.serving-lamp {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: #E3E7F0;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.serving-lamp.on {
+  background: #FFB020;
+  box-shadow: 0 0 0 8rpx rgba(255, 176, 32, 0.18), 0 0 24rpx rgba(255, 176, 32, 0.75);
+  animation: lamp-breathe 1.2s ease-in-out infinite;
+}
+
+@keyframes lamp-breathe {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.92);
+  }
+}
+
+.serving-user {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #1E2A44;
+}
+
+.serving-info .muted {
+  margin-top: 4rpx;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #F3F5FA;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.h-courier {
+  font-size: 27rpx;
+  font-weight: 500;
+}
+
+.h-time {
+  font-size: 22rpx;
+  color: #A0A9BC;
+  text-align: right;
+}

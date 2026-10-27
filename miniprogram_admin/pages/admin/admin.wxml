@@ -1,0 +1,166 @@
+<view class="page">
+  <view class="card" wx:if="{{overview}}">
+    <view class="card-title">
+      <text>驿站概览</text>
+      <text class="sub">今日实时数据</text>
+    </view>
+    <view class="ov-grid">
+      <view class="ov-item">
+        <view class="ov-num">{{overview.today.inbound}}</view>
+        <view class="ov-label">今日入库</view>
+      </view>
+      <view class="ov-item">
+        <view class="ov-num">{{overview.today.picked}}</view>
+        <view class="ov-label">今日取件</view>
+      </view>
+      <view class="ov-item">
+        <view class="ov-num">{{overview.unique_users}}</view>
+        <view class="ov-label">累计取件人数</view>
+      </view>
+    </view>
+    <button class="btn btn-sm ov-btn" bindtap="remindOverdue" loading="{{reminding}}">生成超期提醒</button>
+    <button class="btn btn-ghost ov-btn" bindtap="goDashboard">查看数据看板</button>
+    <view class="ov-tip">扫描滞留超过 48 小时的待取件，写入提醒集合并标记为超期</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>拒收 / 退货管理</text>
+      <text class="sub">售后处理</text>
+    </view>
+    <view class="muted">查看收件人拒收与退货记录，支持撤销误拒收、删除记录</view>
+    <button class="btn btn-ghost ov-btn" bindtap="goRefuse">进入管理</button>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>超期未取处置</text>
+      <text class="sub">ZSet 到期扫描</text>
+    </view>
+    <view class="muted">当前超期 {{expiredCount}} 件 · 扫描到期索引后，可一键退回快递公司，取件码同时失效</view>
+    <view class="row mb">
+      <view class="btn btn-sm btn-ghost" bindtap="sweepExpired">扫描超期件</view>
+      <view class="btn btn-sm btn-danger ml" bindtap="returnExpired">超期件退回</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>包裹入库</text>
+      <text class="sub">Hash 存储</text>
+    </view>
+    <view class="field-label">收件人账号 *</view>
+    <input class="input" value="{{form.receiver_id}}" data-key="receiver_id" bindinput="onInput" placeholder="如 20211003" />
+    <view class="field-label">收件人姓名 *</view>
+    <input class="input" value="{{form.receiver}}" data-key="receiver" bindinput="onInput" placeholder="如 张伟" />
+    <view class="field-label">联系电话</view>
+    <input class="input" value="{{form.phone}}" data-key="phone" bindinput="onInput" placeholder="如 138****8888" />
+    <view class="field-label">快递单号 *</view>
+    <view class="scan-row">
+      <input class="input flex" value="{{form.tracking_no}}" data-key="tracking_no" bindinput="onInput" placeholder="如 SF1234567890" />
+      <view class="btn btn-sm scan-btn" bindtap="scanTracking">扫码</view>
+    </view>
+    <view class="two-col">
+      <view class="col">
+        <view class="field-label">快递公司</view>
+        <picker range="{{couriers}}" value="{{courierIndex}}" data-key="courierIndex" bindchange="onPick">
+          <view class="input pick">{{couriers[courierIndex]}}</view>
+        </picker>
+      </view>
+      <view class="col">
+        <view class="field-label">物品类别</view>
+        <picker range="{{categories}}" value="{{categoryIndex}}" data-key="categoryIndex" bindchange="onPick">
+          <view class="input pick">{{categories[categoryIndex]}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="field-label">所属驿站</view>
+    <picker range="{{stations}}" value="{{stationIndex}}" data-key="stationIndex" bindchange="onPick">
+      <view class="input pick">{{stations[stationIndex]}}</view>
+    </picker>
+    <view class="two-col">
+      <view class="col">
+        <view class="field-label">货架号</view>
+        <input class="input" value="{{form.shelf}}" data-key="shelf" bindinput="onInput" placeholder="留空自动分配" />
+      </view>
+      <view class="col">
+        <view class="field-label">重量(kg)</view>
+        <input class="input" type="digit" value="{{form.weight}}" data-key="weight" bindinput="onInput" />
+      </view>
+    </view>
+    <view class="field-label">保管天数</view>
+    <input class="input" type="number" value="{{form.ttl_days}}" data-key="ttl_days" bindinput="onInput" />
+    <button class="btn" bindtap="submitParcel">确认入库</button>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>包裹查询</text>
+      <text class="sub">编号 P000001 / 快递单号</text>
+    </view>
+    <input class="input" value="{{queryKey}}" bindinput="onQueryInput" placeholder="输入包裹编号或快递单号" />
+    <button class="btn btn-ghost" bindtap="search">查询</button>
+
+    <view wx:if="{{current}}" class="found">
+      <view class="found-head">
+        <text class="found-id">{{current.id}}</text>
+        <text class="tag {{currentTag}}">{{current.status_text}}</text>
+      </view>
+      <view class="muted">{{current.courier}} · {{current.tracking_no}}</view>
+      <view class="muted">取件码：{{current.pickup_code || '已失效'}}</view>
+      <view class="muted">{{current.receiver}}（{{current.receiver_id}}） · {{current.station}} · {{current.shelf}}</view>
+      <view class="divider"></view>
+      <input class="input" value="{{abnormalReason}}" bindinput="onAbnormalInput" placeholder="异常原因" />
+      <view class="op-btns">
+        <view class="btn btn-sm btn-ghost" bindtap="lightParcel" wx:if="{{current.status === 'PENDING' || current.status === 'EXPIRED'}}">点亮货架灯</view>
+        <view class="btn btn-sm btn-danger" bindtap="refuseParcel" wx:if="{{current.status === 'PENDING' || current.status === 'EXPIRED'}}">拒收</view>
+        <view class="btn btn-sm btn-ghost" bindtap="returnParcel" wx:if="{{current.status === 'PICKED'}}">退货</view>
+        <view class="btn btn-sm btn-danger" bindtap="markAbnormal">标记异常</view>
+        <view class="btn btn-sm btn-ghost" bindtap="resetStatus">恢复待取</view>
+        <view class="btn btn-sm btn-ghost" bindtap="generateCode">重新生成</view>
+        <view class="btn btn-sm btn-danger" bindtap="removeParcel">删除包裹</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>黑名单</text>
+      <text class="sub">Set 结构</text>
+    </view>
+    <view class="row">
+      <input class="input flex" value="{{newBlack}}" bindinput="onNewBlackInput" placeholder="用户账号" />
+      <view class="btn btn-sm ml" bindtap="addBlack">加入</view>
+    </view>
+    <view wx:if="{{blacklist.length === 0}}" class="empty">黑名单为空</view>
+    <view class="black-item" wx:for="{{blacklist}}" wx:key="*this">
+      <text>{{item}}</text>
+      <text class="remove" data-uid="{{item}}" bindtap="removeBlack">移除</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>排队叫号 / 取件事件流</text>
+      <text class="sub">List + Stream</text>
+    </view>
+    <view class="row mb">
+      <view class="btn btn-sm btn-ghost" bindtap="callNext">叫下一位</view>
+    </view>
+    <view class="queue-now" wx:if="{{queue && queue.serving}}">
+      <view>当前叫号：{{queue.serving}}</view>
+      <view class="muted" wx:if="{{queue.serving_shelf}}">货架灯已亮：{{queue.serving_shelf}} · 剩余 {{queue.serving_ttl}} 秒 · 等候 {{queue.waiting}} 人</view>
+      <view class="muted" wx:elif="{{queue.serving_pending > 0}}">该用户还有 {{queue.serving_pending}} 件待取，灯已自动熄灭（点亮 120 秒后关闭）· 等候 {{queue.waiting}} 人</view>
+      <view class="muted" wx:else>该用户暂无待取包裹 · 等候 {{queue.waiting}} 人</view>
+    </view>
+    <view wx:if="{{events.length === 0}}" class="empty">暂无取件事件</view>
+    <view class="event-item" wx:for="{{events}}" wx:key="event_id">
+      <view class="event-dot"></view>
+      <view class="event-main">
+        <view class="event-title">{{item.receiver}} 取走 {{item.courier}} 包裹</view>
+        <view class="muted">{{item.parcel_id}} · {{item.shelf}} · {{item.staff}}</view>
+      </view>
+      <view class="event-time">{{item.time}}</view>
+    </view>
+  </view>
+</view>

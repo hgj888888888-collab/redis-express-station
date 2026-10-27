@@ -1,0 +1,165 @@
+.overview {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #1E4FD8 0%, #3A6BF0 100%);
+  border-radius: 20rpx;
+  padding: 30rpx 10rpx;
+  color: #FFFFFF;
+  margin-bottom: 24rpx;
+}
+
+.ov-item {
+  flex: 1;
+  text-align: center;
+}
+
+.ov-num {
+  font-size: 42rpx;
+  font-weight: 600;
+}
+
+.ov-label {
+  font-size: 22rpx;
+  opacity: 0.82;
+  margin-top: 6rpx;
+}
+
+.ov-line {
+  width: 1rpx;
+  height: 56rpx;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18rpx;
+}
+
+.status-name {
+  width: 120rpx;
+  font-size: 25rpx;
+  color: #5C6784;
+}
+
+.bar-track {
+  flex: 1;
+  height: 16rpx;
+  background: #F0F3FA;
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin: 0 16rpx;
+}
+
+.bar-track.thin {
+  height: 10rpx;
+  margin: 10rpx 0 0;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 8rpx;
+  background: #1E4FD8;
+}
+
+.bar-PICKED {
+  background: #12A150;
+}
+
+.bar-ABNORMAL {
+  background: #D94A4A;
+}
+
+.bar-EXPIRED {
+  background: #E0A217;
+}
+
+.bar-fill.amber {
+  background: #E0A217;
+}
+
+.status-count {
+  width: 70rpx;
+  text-align: right;
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #F3F5FA;
+}
+
+.rank-item:last-child {
+  border-bottom: none;
+}
+
+.rank-no {
+  width: 44rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  text-align: center;
+  border-radius: 10rpx;
+  background: #F0F3FA;
+  color: #8A93A6;
+  font-size: 24rpx;
+  margin-right: 18rpx;
+  flex-shrink: 0;
+}
+
+.rank-top {
+  background: #1E4FD8;
+  color: #FFFFFF;
+}
+
+.rank-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.rank-title {
+  font-size: 27rpx;
+  font-weight: 500;
+}
+
+.rank-val {
+  font-size: 24rpx;
+  color: #1E4FD8;
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+
+.scan-btns {
+  display: flex;
+  margin-bottom: 10rpx;
+}
+
+.scan-btns .btn-sm {
+  flex: 1;
+  text-align: center;
+  margin-right: 14rpx;
+}
+
+.scan-btns .btn-sm:last-child {
+  margin-right: 0;
+}
+
+.overdue-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #F3F5FA;
+}
+
+.o-title {
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+.o-hours {
+  font-size: 23rpx;
+  color: #C7860A;
+}

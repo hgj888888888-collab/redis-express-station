@@ -1,0 +1,92 @@
+<view class="page">
+  <view class="overview">
+    <view class="ov-item">
+      <view class="ov-num">{{today.inbound || 0}}</view>
+      <view class="ov-label">今日入库</view>
+    </view>
+    <view class="ov-line"></view>
+    <view class="ov-item">
+      <view class="ov-num">{{today.picked || 0}}</view>
+      <view class="ov-label">今日取件</view>
+    </view>
+    <view class="ov-line"></view>
+    <view class="ov-item">
+      <view class="ov-num">{{uniqueUsers}}</view>
+      <view class="ov-label">去重取件人数</view>
+    </view>
+  </view>
+
+  <view class="card" wx:if="{{status}}">
+    <view class="card-title">
+      <text>包裹状态分布</text>
+      <text class="sub">共 {{status.total}} 件</text>
+    </view>
+    <view class="status-row" wx:for="{{status.items}}" wx:key="status">
+      <text class="status-name">{{item.status_text}}</text>
+      <view class="bar-track">
+        <view
+          class="bar-fill bar-{{item.status}}"
+          style="width: {{status.total ? item.count * 100 / status.total : 0}}%"
+        ></view>
+      </view>
+      <text class="status-count">{{item.count}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>用户包裹数量排行</text>
+      <text class="sub">ZSet · 前 5 名</text>
+    </view>
+    <view class="rank-item" wx:for="{{rankUsers}}" wx:key="user_id">
+      <view class="rank-no {{item.rank <= 3 ? 'rank-top' : ''}}">{{item.rank}}</view>
+      <view class="rank-main">
+        <view class="rank-title">{{item.user_id}}</view>
+        <view class="bar-track thin">
+          <view class="bar-fill blue" style="width: {{item.parcel_count * 100 / maxUserCount}}%"></view>
+        </view>
+      </view>
+      <view class="rank-val">{{item.parcel_count}} 件</view>
+    </view>
+    <view wx:if="{{rankUsers.length === 0}}" class="empty">暂无数据</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>滞留时长排行</text>
+      <text class="sub">ZSet · 未取件</text>
+    </view>
+    <view class="rank-item" wx:for="{{rankStay}}" wx:key="id">
+      <view class="rank-no {{item.rank <= 3 ? 'rank-top' : ''}}">{{item.rank}}</view>
+      <view class="rank-main">
+        <view class="rank-title">{{item.courier}} · {{item.shelf}}</view>
+        <view class="muted">{{item.tracking_no}}</view>
+        <view class="bar-track thin">
+          <view class="bar-fill amber" style="width: {{item.stay_hours * 100 / maxStay}}%"></view>
+        </view>
+      </view>
+      <view class="rank-val">{{item.stay_text}}</view>
+    </view>
+    <view wx:if="{{rankStay.length === 0}}" class="empty">暂无滞留包裹</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>超期未取提醒</text>
+      <text class="sub">当前阈值 {{overdueHours}} 小时</text>
+    </view>
+    <view class="scan-btns">
+      <view class="btn btn-sm btn-ghost" data-hours="24" bindtap="scanOverdue">扫描 24h</view>
+      <view class="btn btn-sm btn-ghost" data-hours="48" bindtap="scanOverdue">扫描 48h</view>
+      <view class="btn btn-sm" bindtap="remind">生成提醒</view>
+    </view>
+    <view wx:if="{{overdue.length === 0}}" class="empty">点击扫描查看滞留包裹</view>
+    <view class="overdue-item" wx:for="{{overdue}}" wx:key="id">
+      <view>
+        <view class="o-title">{{item.courier}} · {{item.shelf}}</view>
+        <view class="muted">{{item.receiver}}（{{item.receiver_id}}）</view>
+      </view>
+      <view class="o-hours">滞留 {{item.stay_hours}}h</view>
+    </view>
+  </view>
+</view>

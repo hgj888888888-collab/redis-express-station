@@ -1,0 +1,78 @@
+<view class="page">
+  <view class="card">
+    <view class="card-title">
+      <text>今日概览</text>
+      <text class="sub">{{today.date}}</text>
+    </view>
+    <view class="ov-grid">
+      <view class="ov-item">
+        <view class="ov-num">{{today.inbound}}</view>
+        <view class="ov-label">今日入库</view>
+      </view>
+      <view class="ov-item">
+        <view class="ov-num">{{today.picked}}</view>
+        <view class="ov-label">今日取件</view>
+      </view>
+      <view class="ov-item">
+        <view class="ov-num">{{total}}</view>
+        <view class="ov-label">包裹总数</view>
+      </view>
+      <view class="ov-item">
+        <view class="ov-num">{{uniqueUsers}}</view>
+        <view class="ov-label">取件人数</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>近 7 天出入库</text>
+      <text class="sub">单位：件</text>
+    </view>
+    <view class="chart">
+      <view class="bar-group" wx:for="{{daily}}" wx:key="date">
+        <view class="bars">
+          <view class="bar bar-in" style="height: {{item.inboundH}}rpx"></view>
+          <view class="bar bar-out" style="height: {{item.pickedH}}rpx"></view>
+        </view>
+        <view class="bar-num">{{item.inbound}} / {{item.picked}}</view>
+        <view class="bar-date">{{item.date}}</view>
+      </view>
+    </view>
+    <view class="legend">
+      <text class="legend-dot dot-in"></text><text class="legend-text">入库</text>
+      <text class="legend-dot dot-out"></text><text class="legend-text">取件</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>包裹状态分布</text>
+      <text class="sub">共 {{total}} 件</text>
+    </view>
+    <view class="stat-row" wx:for="{{status}}" wx:key="status">
+      <view class="stat-label">{{item.status_text}}</view>
+      <view class="stat-track">
+        <view class="stat-fill" style="width: {{item.width}}%; background: {{item.color}}"></view>
+      </view>
+      <view class="stat-value">{{item.count}}</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>快递公司占比</text>
+      <text class="sub">SCAN 聚合</text>
+    </view>
+    <view wx:if="{{couriers.length === 0}}" class="empty">暂无数据</view>
+    <view class="stat-row" wx:for="{{couriers}}" wx:key="name">
+      <view class="stat-label">{{item.name}}</view>
+      <view class="stat-track">
+        <view class="stat-fill" style="width: {{item.width}}%; background: #3A6BF0"></view>
+      </view>
+      <view class="stat-value">{{item.count}}</view>
+    </view>
+  </view>
+
+  <view class="footer-tip">数据来源：Redis Hash / ZSet / HyperLogLog 实时统计</view>
+</view>

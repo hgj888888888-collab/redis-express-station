@@ -1,0 +1,88 @@
+<view class="page">
+  <view class="card">
+    <view class="card-title">
+      <text>输入取件码</text>
+      <text class="sub">6 位数字</text>
+    </view>
+    <input
+      class="code-input"
+      type="number"
+      maxlength="6"
+      value="{{code}}"
+      placeholder="· · · · · ·"
+      bindinput="onCodeInput"
+    />
+    <button class="btn" bindtap="submit">确认取件</button>
+    <view class="muted center">取件码核销后立即失效，防止一码多取</view>
+  </view>
+
+  <view class="card success-card" wx:if="{{result}}">
+    <view class="success-title">取件成功</view>
+    <view class="success-no">{{result.tracking_no}}</view>
+    <view class="success-grid">
+      <view class="sg-item">
+        <view class="sg-label">收件人</view>
+        <view class="sg-value">{{result.receiver}}</view>
+      </view>
+      <view class="sg-item">
+        <view class="sg-label">快递公司</view>
+        <view class="sg-value">{{result.courier}}</view>
+      </view>
+      <view class="sg-item">
+        <view class="sg-label">货架</view>
+        <view class="sg-value">{{result.shelf}}</view>
+      </view>
+      <view class="sg-item">
+        <view class="sg-label">取件时间</view>
+        <view class="sg-value">{{result.pickup_time_text}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>高峰排队</text>
+      <text class="sub">当前叫号：{{queue.serving || '暂无'}}</text>
+    </view>
+    <view class="queue-row">
+      <view class="queue-num">{{queue.waiting || 0}}</view>
+      <view class="queue-info">
+        <view>排队人数</view>
+        <view class="muted" wx:if="{{myQueuePos > 0}}">我的排位：第 {{myQueuePos}} 位</view>
+        <view class="muted" wx:else>未取号</view>
+      </view>
+      <view class="queue-btns">
+        <view class="btn btn-sm" bindtap="joinQueue" wx:if="{{myQueuePos === 0}}">取号</view>
+        <view class="btn btn-sm btn-ghost" bindtap="leaveQueue" wx:else>放弃</view>
+      </view>
+    </view>
+    <view class="serving-box" wx:if="{{queue.serving}}">
+      <view class="serving-lamp {{queue.serving_shelf ? 'on' : ''}}"></view>
+      <view class="serving-info">
+        <view class="serving-user">正在叫号：{{queue.serving}}</view>
+        <view class="muted" wx:if="{{queue.serving_shelf}}">
+          货架灯已亮：{{queue.serving_shelf}} · 约 {{queue.serving_ttl}} 秒后自动熄灭
+        </view>
+        <view class="muted" wx:elif="{{queue.serving_pending > 0}}">
+          你有 {{queue.serving_pending}} 件待取，货架灯已自动熄灭（点亮 120 秒后关闭），请直接凭取件码取件
+        </view>
+        <view class="muted" wx:else>该用户暂无待取包裹，未点亮货架灯</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>我的取件记录</text>
+      <text class="sub">最近 {{history.length}} 条</text>
+    </view>
+    <view wx:if="{{history.length === 0}}" class="empty">暂无取件记录</view>
+    <view class="history-item" wx:for="{{history}}" wx:key="pickup_time">
+      <view>
+        <view class="h-courier">{{item.courier}} · {{item.shelf}}</view>
+        <view class="muted">{{item.tracking_no}}</view>
+      </view>
+      <view class="h-time">{{item.timeText}}</view>
+    </view>
+  </view>
+</view>

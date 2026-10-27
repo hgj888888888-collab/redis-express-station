@@ -1,0 +1,163 @@
+.ov-grid {
+  display: flex;
+}
+
+.ov-item {
+  flex: 1;
+  text-align: center;
+}
+
+.ov-num {
+  font-size: 42rpx;
+  font-weight: 600;
+  color: #1E4FD8;
+}
+
+.ov-label {
+  font-size: 23rpx;
+  color: #8A93A6;
+  margin-top: 6rpx;
+}
+
+.ov-btn {
+  margin-top: 24rpx;
+}
+
+.ov-tip {
+  font-size: 22rpx;
+  color: #A0A9BC;
+  text-align: center;
+  margin-top: 14rpx;
+}
+
+.two-col {
+  display: flex;
+  justify-content: space-between;
+}
+
+.col {
+  width: 48%;
+}
+
+.pick {
+  color: #1A1F36;
+}
+
+.found {
+  margin-top: 22rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #EEF1F8;
+}
+
+.found-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.found-id {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1E4FD8;
+}
+
+.op-btns {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.op-btns .btn-sm {
+  margin: 0 14rpx 14rpx 0;
+}
+
+.flex {
+  flex: 1;
+}
+
+.ml {
+  margin-left: 16rpx;
+}
+
+.mb {
+  margin-bottom: 12rpx;
+}
+
+.queue-now {
+  background: #FFFBF2;
+  border-radius: 14rpx;
+  padding: 18rpx 22rpx;
+  margin-bottom: 16rpx;
+  font-size: 26rpx;
+}
+
+.queue-now .muted {
+  margin-top: 4rpx;
+}
+
+.scan-row {
+  display: flex;
+  align-items: center;
+}
+
+.scan-row .input {
+  flex: 1;
+}
+
+.scan-btn {
+  margin: 0 0 18rpx 16rpx;
+  flex-shrink: 0;
+}
+
+.black-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #F3F5FA;
+  font-size: 26rpx;
+}
+
+.black-item:last-child {
+  border-bottom: none;
+}
+
+.remove {
+  color: #D94A4A;
+  font-size: 24rpx;
+}
+
+.event-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid #F3F5FA;
+}
+
+.event-item:last-child {
+  border-bottom: none;
+}
+
+.event-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: #1E4FD8;
+  margin: 10rpx 16rpx 0 0;
+  flex-shrink: 0;
+}
+
+.event-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-title {
+  font-size: 26rpx;
+}
+
+.event-time {
+  font-size: 21rpx;
+  color: #A0A9BC;
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}

@@ -1,0 +1,24 @@
+<view class="page">
+  <view class="card">
+    <view class="card-title">
+      <text>到件通知</text>
+      <text class="sub">学号 {{userId}} · 共 {{items.length}} 条</text>
+    </view>
+    <view class="notice-tip">包裹入库后会自动生成通知，取件码也在消息里，无需等待短信。</view>
+  </view>
+
+  <view wx:if="{{items.length === 0}}" class="card">
+    <view class="empty">暂无到件通知</view>
+  </view>
+
+  <view class="card notice" wx:for="{{items}}" wx:key="key">
+    <view class="notice-head">
+      <view class="notice-dot"></view>
+      <text class="notice-title">{{item.title}}</text>
+      <text class="notice-time">{{item.time_text}}</text>
+    </view>
+    <view class="notice-content">{{item.content}}</view>
+  </view>
+
+  <view class="footer-tip">数据来源：Redis List（最近 50 条）</view>
+</view>

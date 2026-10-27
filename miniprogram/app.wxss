@@ -1,0 +1,142 @@
+page {
+  background: #F5F7FC;
+  color: #1A1F36;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 28rpx;
+}
+
+.page {
+  padding: 24rpx 24rpx 140rpx;
+}
+
+.card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 6rpx 20rpx rgba(30, 79, 216, 0.06);
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title .sub {
+  font-size: 24rpx;
+  color: #8A93A6;
+  font-weight: 400;
+}
+
+.muted {
+  color: #8A93A6;
+  font-size: 24rpx;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn {
+  background: #1E4FD8;
+  color: #FFFFFF;
+  border-radius: 14rpx;
+  font-size: 28rpx;
+  padding: 20rpx 0;
+  text-align: center;
+  border: none;
+  line-height: 1.4;
+}
+
+.btn::after {
+  border: none;
+}
+
+.btn-ghost {
+  background: #FFFFFF;
+  color: #1E4FD8;
+  border: 1rpx solid #C9D6F7;
+}
+
+.btn-danger {
+  background: #FFFFFF;
+  color: #D94A4A;
+  border: 1rpx solid #F3C9C9;
+}
+
+.btn-sm {
+  font-size: 24rpx;
+  padding: 12rpx 24rpx;
+  border-radius: 10rpx;
+  display: inline-block;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 22rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+}
+
+.tag-pending {
+  background: #E8EFFF;
+  color: #1E4FD8;
+}
+
+.tag-picked {
+  background: #E7F6EC;
+  color: #12A150;
+}
+
+.tag-abnormal {
+  background: #FDECEC;
+  color: #D94A4A;
+}
+
+.tag-expired {
+  background: #FFF4E0;
+  color: #C7860A;
+}
+
+.tag-refused {
+  background: #EEF0F4;
+  color: #5C6784;
+}
+
+.tag-returned {
+  background: #EAF3FB;
+  color: #2A7AB8;
+}
+
+.input {
+  background: #F5F7FC;
+  border-radius: 12rpx;
+  padding: 20rpx 22rpx;
+  font-size: 28rpx;
+  margin-bottom: 18rpx;
+}
+
+.field-label {
+  font-size: 24rpx;
+  color: #5C6784;
+  margin-bottom: 10rpx;
+}
+
+.empty {
+  text-align: center;
+  color: #A7B0C2;
+  font-size: 26rpx;
+  padding: 60rpx 0;
+}
+
+.divider {
+  height: 1rpx;
+  background: #EEF1F8;
+  margin: 20rpx 0;
+}
